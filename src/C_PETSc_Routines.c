@@ -521,6 +521,7 @@ PETSC_INTERN PetscErrorCode MatGetNNZs_both_c(Mat *A, PetscInt *nnzs_local, Pets
   PetscFunctionReturn(PETSC_SUCCESS);
 }
 
+extern PetscErrorCode MatGetDiagonalMarkers_SeqAIJ(Mat, const PetscInt **, PetscBool *);
 // Returns true if a matrix is only the diagonal
 PETSC_INTERN PetscErrorCode MatGetDiagonalOnly_c(Mat *A, int *diag_only)
 {
@@ -556,9 +557,11 @@ PETSC_INTERN PetscErrorCode MatGetDiagonalOnly_c(Mat *A, int *diag_only)
   if (size != 1)
   {
       Mat_SeqAIJ *b = (Mat_SeqAIJ *)mat_nonlocal->data;
+      PetscBool diagDense;
 
       // In parallel also have to check the nonlocal has nothing in it
-      if (a->diagonaldense && local_rows == a->nz && b->nz == 0)
+      MatGetDiagonalMarkers_SeqAIJ(mat_local, NULL, &diagDense);
+      if (diagDense && local_rows == a->nz && b->nz == 0)
       {
          rank_diag_serial++;
       }
@@ -568,8 +571,10 @@ PETSC_INTERN PetscErrorCode MatGetDiagonalOnly_c(Mat *A, int *diag_only)
   }
   else
   {
+      PetscBool diagDense;
+      MatGetDiagonalMarkers_SeqAIJ(*A, NULL, &diagDense);
       // In serial easy 
-      if (a->diagonaldense && local_rows == a->nz)
+      if (diagDense && local_rows == a->nz)
       {
          rank_diag++;
       }
