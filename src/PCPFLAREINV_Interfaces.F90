@@ -59,7 +59,7 @@ module pcpflareinv_interfaces
          use iso_c_binding
 #include "finclude/pflare_types.h"
          integer(c_long_long), value   :: A_array
-         integer                       :: b
+         integer(c_int)                       :: b
          PetscErrorCode                :: PCPFLAREINVGetMatrixFree_mine
       end function PCPFLAREINVGetMatrixFree_mine 
    end interface    
@@ -107,7 +107,7 @@ module pcpflareinv_interfaces
          use iso_c_binding
 #include "finclude/pflare_types.h"
          integer(c_long_long), value   :: A_array
-         integer, value                :: b
+         integer(c_int), value                :: b
          PetscErrorCode                :: PCPFLAREINVSetMatrixFree_mine
       end function PCPFLAREINVSetMatrixFree_mine 
    end interface  
