@@ -560,7 +560,7 @@ PETSC_INTERN PetscErrorCode MatGetDiagonalOnly_c(Mat *A, int *diag_only)
       PetscBool diagDense;
 
       // In parallel also have to check the nonlocal has nothing in it
-      MatGetDiagonalMarkers_SeqAIJ(mat_local, NULL, &diagDense);
+      PetscCall(MatGetDiagonalMarkers_SeqAIJ(mat_local, NULL, &diagDense));
       if (diagDense && local_rows == a->nz && b->nz == 0)
       {
          rank_diag_serial++;
@@ -572,7 +572,7 @@ PETSC_INTERN PetscErrorCode MatGetDiagonalOnly_c(Mat *A, int *diag_only)
   else
   {
       PetscBool diagDense;
-      MatGetDiagonalMarkers_SeqAIJ(*A, NULL, &diagDense);
+      PetscCall(MatGetDiagonalMarkers_SeqAIJ(*A, NULL, &diagDense));
       // In serial easy 
       if (diagDense && local_rows == a->nz)
       {
